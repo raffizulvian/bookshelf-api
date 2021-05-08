@@ -5,6 +5,7 @@ const {
   deleteBookByID,
 } = require('./handler');
 
+// TODO: tambahkan route untuk menangani 404
 const routes = [
   {
     method: 'POST',
@@ -25,6 +26,11 @@ const routes = [
     method: 'DELETE',
     path: '/books/{bookId}',
     handler: deleteBookByID,
+  },
+  {
+    method: '*',
+    path: '/{any*}',
+    handler: () => {},
   },
 ];
 
