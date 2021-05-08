@@ -1,8 +1,13 @@
-const Hapi = require('@hapi/hapi');
+const hapi = require('@hapi/hapi');
 const routes = require('./routes');
 
+/**
+ * Menginisialisasi server.
+ * @async
+ * @requires hapi
+ */
 const init = async () => {
-  const server = Hapi.server({
+  const server = hapi.server({
     port: 5000,
     host: 'localhost',
     routes: {

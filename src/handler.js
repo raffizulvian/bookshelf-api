@@ -1,6 +1,13 @@
 const { nanoid } = require('nanoid');
 const books = require('./books');
 
+/**
+ * Menangani permintaan HTTP 'POST' dan menambahkan info buku baru ke penyimpanan data
+ * @requires nanoid
+ * @param {Object} request
+ * @param {Object} h
+ * @returns {Object} HTTP response
+ */
 const addBook = (request, h) => {
   const {
     name, year, author, summary, publisher, pageCount, readPage, reading,
@@ -60,6 +67,14 @@ const addBook = (request, h) => {
   }).code(201);
 };
 
+/**
+ * Menangani permintaan untuk mengembalikan daftar buku dengan mencari kecocokan antara query
+ * dengan nama buku. Daftar yyang akan ditampilkan adalah daftar buku-uku yang pada namanya
+ * mengandung query yang diberikan. Query yang diberikan bersifat non-case sensitive.
+ * @param {Object} h
+ * @param {string} nameQuery
+ * @returns {Object} HTTP response
+ */
 const getBooksByName = (h, nameQuery) => {
   const nameRegexPattern = new RegExp(nameQuery, 'i');
   const filteredBooks = books.filter((book) => (
@@ -78,6 +93,14 @@ const getBooksByName = (h, nameQuery) => {
   }).code(200);
 };
 
+/**
+ * Menangani permintaan untuk mengembalikan daftar buku dengan query berdasarkan status buku apakah
+ * sedang dibaca atau tidak. Bila query bernilai '1', maka akan mengembalikan buku yang sedang
+ * dibaca. Bila query bernilai 0, maka akan mengembalikan daftar buku yang tidak sedang dibaca.
+ * @param {Object} h
+ * @param {string} readingQuery - '1' atau '0'
+ * @returns {Object} HTTP response
+ */
 const getBookByReading = (h, readingQuery) => {
   const filteredBooks = books.filter((book) => (
     readingQuery === '1' ? book.reading === true : book.reading === false
@@ -95,6 +118,15 @@ const getBookByReading = (h, readingQuery) => {
   }).code(200);
 };
 
+/**
+ * Menangani permintaan untuk mengembalikan daftar buku dengan query berdasarkan status buku apakah
+ * telah selesai dibaca atau belum. Bila query bernilai '1', maka akan mengembalikan buku yang telah
+ * selesai dibaca. Bila query bernilai 0, maka akan mengembalikan daftar buku yang belum selesai
+ * dibaca.
+ * @param {Object} h
+ * @param {string} finishedQuery - '1' atau '0'
+ * @returns {Object} HTTP response
+ */
 const getBookByFinished = (h, finishedQuery) => {
   const filteredBooks = books.filter((book) => (
     finishedQuery === '1' ? book.finished === true : book.finished === false
@@ -112,6 +144,12 @@ const getBookByFinished = (h, finishedQuery) => {
   }).code(200);
 };
 
+/**
+ * Menangani permintaan untuk mengembalikan daftar buku yang tersimpan.
+ * @param {Object} h
+ * @param {Object} query
+ * @returns {Object} HTTP response
+ */
 const getAllBooks = (h, query) => {
   if (query.name !== undefined) {
     return getBooksByName(h, query.name);
@@ -137,6 +175,12 @@ const getAllBooks = (h, query) => {
   }).code(200);
 };
 
+/**
+ * Menangani permintaan untuk mengembalikan info buku dengan bookId yang spesifik.
+ * @param {Object} h
+ * @param {Object} bookToSent
+ * @returns {Object} HTTP response
+ */
 const getBookByID = (h, bookToSent) => {
   if (bookToSent === undefined) {
     return h.response({
@@ -153,6 +197,16 @@ const getBookByID = (h, bookToSent) => {
   }).code(200);
 };
 
+/**
+ * Menangani permintaan HTTP 'GET' dan akan mengembalikan daftar buku yang tersimpan dalam
+ * penyimpanan data. Keluaran dapat berupa info tentang suatu buku yang spesifik dengan menyertakan
+ * parameter bookId pada URL. Pengguna juga dapat menggunakan query untuk mendapatkan daftar buku
+ * berdasarkan nama (?name), buku yang sedang dibaca (?reading), ataupun buku yang telah selesai
+ * dibaca (?finished).
+ * @param {Object} request
+ * @param {Object} h
+ * @returns {Object} HTTP response
+ */
 const getBooks = (request, h) => {
   const { bookId } = request.params;
   const { query } = request;
@@ -165,6 +219,13 @@ const getBooks = (request, h) => {
   return getBookByID(h, bookToSent);
 };
 
+/**
+ * Menangani permintaan HTTP 'PUT' dan melakuakan perubahan info dari suatu buku dengan bookId
+ * spesifik.
+ * @param {Object} request
+ * @param {Object} h
+ * @returns {Object} HTTP response
+ */
 const editBookByID = (request, h) => {
   const { bookId } = request.params;
   const {
@@ -215,6 +276,12 @@ const editBookByID = (request, h) => {
   }).code(200);
 };
 
+/**
+ * Menangani permintaan HTTP 'DELETE' dan menghapus info buku dengan bookId spesifik.
+ * @param {Object} request
+ * @param {Object} h
+ * @returns {Object} HTTP response
+ */
 const deleteBookByID = (request, h) => {
   const { bookId } = request.params;
 
