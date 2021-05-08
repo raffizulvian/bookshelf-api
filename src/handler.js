@@ -211,6 +211,7 @@ const getBooks = (request, h) => {
   const { bookId } = request.params;
   const { query } = request;
 
+  // TODO: lakukan penyusunan ulang fungsi ini agar mengikuti early exit pattern
   if (bookId === undefined) {
     return getAllBooks(h, query);
   }
@@ -301,6 +302,18 @@ const deleteBookByID = (request, h) => {
   }).code(200);
 };
 
+/**
+ *
+ * @param {Object} request
+ * @param {Object} h
+ * @returns {Object} HTTP response
+ */
+const badRequest = (request, h) => h.response({
+  statusCode: '400',
+  error: 'Bad Request',
+  message: `${request.url} saat ini tidak tersedia dan tidak dapat menangani permintaan ${request.method}`,
+}).code(400);
+
 module.exports = {
-  addBook, getBooks, editBookByID, deleteBookByID,
+  addBook, getBooks, editBookByID, deleteBookByID, badRequest,
 };

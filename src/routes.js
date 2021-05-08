@@ -3,6 +3,7 @@ const {
   getBooks,
   editBookByID,
   deleteBookByID,
+  badRequest,
 } = require('./handler');
 
 // TODO: tambahkan route untuk menangani 404
@@ -30,7 +31,7 @@ const routes = [
   {
     method: '*',
     path: '/{any*}',
-    handler: () => {},
+    handler: badRequest,
   },
 ];
 
