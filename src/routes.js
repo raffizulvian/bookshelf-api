@@ -9,7 +9,7 @@ const routes = [
   {
     method: 'GET',
     path: '/books/{bookId?}',
-    handler: () => {},
+    handler: getBooks,
   },
   {
     method: 'PUT',

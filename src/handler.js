@@ -44,20 +44,53 @@ const addBook = (request, h) => {
 
   const isSuccess = books.filter((book) => book.id === id).length > 0;
 
-  if (isSuccess) {
+  if (!isSuccess) {
     return h.response({
-      status: 'success',
-      message: 'Buku berhasil ditambahkan',
-      data: {
-        bookId: '1L7ZtDUFeGs7VlEt',
-      },
-    }).code(201);
+      status: 'error',
+      message: 'Buku gagal ditambahkan',
+    }).code(500);
   }
 
   return h.response({
-    status: 'error',
-    message: 'Buku gagal ditambahkan',
-  }).code(500);
+    status: 'success',
+    message: 'Buku berhasil ditambahkan',
+    data: {
+      bookId: id,
+    },
+  }).code(201);
 };
 
-module.exports = { addBook };
+const getAllBooks = (h) => h.response({
+  status: 'success',
+  data: books,
+}).code(200);
+
+const getBooksByID = (h, bookToSent) => {
+  if (bookToSent.length === 0) {
+    return h.response({
+      status: 'fail',
+      message: 'Buku tidak ditemukan',
+    }).code(404);
+  }
+
+  return h.response({
+    status: 'success',
+    data: {
+      book: bookToSent,
+    },
+  }).code(200);
+};
+
+const getBooks = (request, h) => {
+  const { bookId = '' } = request.params;
+  const { name, reading, finished } = request.query;
+
+  if (bookId === '') {
+    return getAllBooks(h);
+  }
+
+  const bookToSent = books.filter((book) => book.id === bookId);
+  return getBooksByID(h, bookToSent);
+};
+
+module.exports = { addBook, getBooks };
