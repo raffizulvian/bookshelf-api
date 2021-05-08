@@ -65,8 +65,8 @@ const getAllBooks = (h) => h.response({
   data: books,
 }).code(200);
 
-const getBooksByID = (h, bookToSent) => {
-  if (bookToSent.length === 0) {
+const getBookByID = (h, bookToSent) => {
+  if (bookToSent === undefined) {
     return h.response({
       status: 'fail',
       message: 'Buku tidak ditemukan',
@@ -89,8 +89,8 @@ const getBooks = (request, h) => {
     return getAllBooks(h);
   }
 
-  const bookToSent = books.filter((book) => book.id === bookId);
-  return getBooksByID(h, bookToSent);
+  const bookToSent = books.filter((book) => book.id === bookId)[0];
+  return getBookByID(h, bookToSent);
 };
 
 module.exports = { addBook, getBooks };
