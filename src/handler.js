@@ -60,10 +60,55 @@ const addBook = (request, h) => {
   }).code(201);
 };
 
-const getAllBooks = (h) => h.response({
-  status: 'success',
-  data: books,
-}).code(200);
+const getBooksByName = (h, name) => {
+  const booksToSent = books.filter((book) => book.name.include(name));
+
+  return h.response({
+    status: 'success',
+    data: booksToSent,
+  }).code(200);
+};
+
+const getBookByReading = (h, reading) => {
+  const booksToSent = books.filter((book) => (
+    book.reading === true ? reading === 1 : book.reading === false
+  ));
+
+  return h.response({
+    status: 'success',
+    data: booksToSent,
+  }).code(200);
+};
+
+const getBookByFinished = (h, finished) => {
+  const booksToSent = books.filter((book) => (
+    book.finished === true ? finished === 1 : book.finished === false
+  ));
+
+  return h.response({
+    status: 'success',
+    data: booksToSent,
+  }).code(200);
+};
+
+const getAllBooks = (h, { name, reading, finished }) => {
+  if (name !== undefined) {
+    return getBooksByName(h, name);
+  }
+
+  if (reading !== undefined) {
+    return getBookByReading(h, reading);
+  }
+
+  if (finished !== undefined) {
+    return getBookByFinished(h, finished);
+  }
+
+  return h.response({
+    status: 'success',
+    data: books,
+  }).code(200);
+};
 
 const getBookByID = (h, bookToSent) => {
   if (bookToSent === undefined) {
@@ -83,10 +128,10 @@ const getBookByID = (h, bookToSent) => {
 
 const getBooks = (request, h) => {
   const { bookId = '' } = request.params;
-  const { name, reading, finished } = request.query;
+  const { query } = request;
 
   if (bookId === '') {
-    return getAllBooks(h);
+    return getAllBooks(h, query);
   }
 
   const bookToSent = books.filter((book) => book.id === bookId)[0];
