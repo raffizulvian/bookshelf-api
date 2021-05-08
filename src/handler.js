@@ -178,7 +178,7 @@ const getAllBooks = (h, query) => {
 /**
  * Menangani permintaan untuk mengembalikan info buku dengan bookId yang spesifik.
  * @param {Object} h
- * @param {Object} bookToSent
+ * @param {Object} bookId
  * @returns {Object} HTTP response
  */
 const getBookByID = (h, bookId) => {
