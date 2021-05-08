@@ -1,3 +1,5 @@
+const { addBook } = require('./handler');
+
 const routes = [
   {
     method: 'POST',
@@ -7,13 +9,7 @@ const routes = [
   {
     method: 'GET',
     path: '/books/{bookid?}',
-    handler: (request, h) => {
-      const { bookid = '' } = request.params;
-
-      const { name, reading, finished } = request.query;
-
-      return `GET books ${bookid}`;
-    },
+    handler: addBook,
   },
   {
     method: 'PUT',
