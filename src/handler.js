@@ -61,7 +61,14 @@ const addBook = (request, h) => {
 };
 
 const getBooksByName = (h, nameQuery) => {
-  const booksToSent = books.filter((book) => book.name.include(nameQuery));
+  const nameRegexPattern = new RegExp(nameQuery, 'i');
+  const filteredBooks = books.filter((book) => nameRegexPattern.test(book.name));
+
+  const booksToSent = [];
+  filteredBooks.forEach((book) => {
+    const { id, name, publisher } = book;
+    booksToSent.push({ id, name, publisher });
+  });
 
   return h.response({
     status: 'success',
@@ -72,9 +79,15 @@ const getBooksByName = (h, nameQuery) => {
 };
 
 const getBookByReading = (h, readingQuery) => {
-  const booksToSent = books.filter((book) => (
-    book.reading === true ? readingQuery === 1 : book.reading === false
+  const filteredBooks = books.filter((book) => (
+    readingQuery === '1' ? book.reading === true : book.reading === false
   ));
+
+  const booksToSent = [];
+  filteredBooks.forEach((book) => {
+    const { id, name, publisher } = book;
+    booksToSent.push({ id, name, publisher });
+  });
 
   return h.response({
     status: 'success',
@@ -85,9 +98,15 @@ const getBookByReading = (h, readingQuery) => {
 };
 
 const getBookByFinished = (h, finishedQuery) => {
-  const booksToSent = books.filter((book) => (
-    book.finished === true ? finishedQuery === 1 : book.finished === false
+  const filteredBooks = books.filter((book) => (
+    finishedQuery === '1' ? book.finished === true : book.finished === false
   ));
+
+  const booksToSent = [];
+  filteredBooks.forEach((book) => {
+    const { id, name, publisher } = book;
+    booksToSent.push({ id, name, publisher });
+  });
 
   return h.response({
     status: 'success',
