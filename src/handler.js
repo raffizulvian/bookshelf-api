@@ -6,7 +6,7 @@ const addBook = (request, h) => {
     name, year, author, summary, publisher, pageCount, readPage, reading,
   } = request.payload;
 
-  if (!name) {
+  if (name === undefined) {
     return h.response({
       status: 'fail',
       message: 'Gagal menambahkan buku. Mohon isi nama buku',
@@ -160,10 +160,10 @@ const getBookByID = (h, bookToSent) => {
 };
 
 const getBooks = (request, h) => {
-  const { bookId = '' } = request.params;
+  const { bookId } = request.params;
   const { query } = request;
 
-  if (bookId === '') {
+  if (bookId === undefined) {
     return getAllBooks(h, query);
   }
 
@@ -172,12 +172,12 @@ const getBooks = (request, h) => {
 };
 
 const editBookByID = (request, h) => {
-  const { bookId = '' } = request.params;
+  const { bookId } = request.params;
   const {
     name, year, author, summary, publisher, pageCount, readPage, reading,
   } = request.payload;
 
-  if (!name) {
+  if (name === undefined) {
     return h.response({
       status: 'fail',
       message: 'Gagal memperbarui buku. Mohon isi nama buku',
