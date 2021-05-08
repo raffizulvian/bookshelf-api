@@ -308,12 +308,12 @@ const deleteBookByID = (request, h) => {
  * @param {Object} h
  * @returns {Object} HTTP response
  */
-const badRequest = (request, h) => h.response({
-  statusCode: '400',
-  error: 'Bad Request',
+const notFound = (request, h) => h.response({
+  statusCode: '404',
+  error: 'Not Found',
   message: `${request.url} saat ini tidak tersedia dan tidak dapat menangani permintaan ${request.method}`,
 }).code(400);
 
 module.exports = {
-  addBook, getBooks, editBookByID, deleteBookByID, badRequest,
+  addBook, getBooks, editBookByID, deleteBookByID, notFound,
 };

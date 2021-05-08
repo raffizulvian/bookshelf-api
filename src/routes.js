@@ -3,10 +3,9 @@ const {
   getBooks,
   editBookByID,
   deleteBookByID,
-  badRequest,
+  notFound,
 } = require('./handler');
 
-// TODO: tambahkan route untuk menangani 404
 const routes = [
   {
     method: 'POST',
@@ -31,7 +30,7 @@ const routes = [
   {
     method: '*',
     path: '/{any*}',
-    handler: badRequest,
+    handler: notFound,
   },
 ];
 
