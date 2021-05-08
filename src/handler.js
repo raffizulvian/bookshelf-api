@@ -65,7 +65,9 @@ const getBooksByName = (h, name) => {
 
   return h.response({
     status: 'success',
-    data: booksToSent,
+    data: {
+      books: booksToSent,
+    },
   }).code(200);
 };
 
@@ -76,7 +78,9 @@ const getBookByReading = (h, reading) => {
 
   return h.response({
     status: 'success',
-    data: booksToSent,
+    data: {
+      books: booksToSent,
+    },
   }).code(200);
 };
 
@@ -87,26 +91,36 @@ const getBookByFinished = (h, finished) => {
 
   return h.response({
     status: 'success',
-    data: booksToSent,
+    data: {
+      books: booksToSent,
+    },
   }).code(200);
 };
 
-const getAllBooks = (h, { name, reading, finished }) => {
-  if (name !== undefined) {
-    return getBooksByName(h, name);
+const getAllBooks = (h, query) => {
+  if (query.name !== undefined) {
+    return getBooksByName(h, query.name);
   }
 
-  if (reading !== undefined) {
-    return getBookByReading(h, reading);
+  if (query.reading !== undefined) {
+    return getBookByReading(h, query.reading);
   }
 
-  if (finished !== undefined) {
-    return getBookByFinished(h, finished);
+  if (query.finished !== undefined) {
+    return getBookByFinished(h, query.finished);
   }
+
+  const booksToSent = [];
+  books.forEach((book) => {
+    const { id, name, publisher } = book;
+    booksToSent.push({ id, name, publisher });
+  });
 
   return h.response({
     status: 'success',
-    data: books,
+    data: {
+      books: booksToSent,
+    },
   }).code(200);
 };
 
