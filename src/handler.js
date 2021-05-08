@@ -181,7 +181,9 @@ const getAllBooks = (h, query) => {
  * @param {Object} bookToSent
  * @returns {Object} HTTP response
  */
-const getBookByID = (h, bookToSent) => {
+const getBookByID = (h, bookId) => {
+  const bookToSent = books.filter((book) => book.id === bookId)[0];
+
   if (bookToSent === undefined) {
     return h.response({
       status: 'fail',
@@ -211,13 +213,11 @@ const getBooks = (request, h) => {
   const { bookId } = request.params;
   const { query } = request;
 
-  // TODO: lakukan penyusunan ulang fungsi ini agar mengikuti early exit pattern
-  if (bookId === undefined) {
-    return getAllBooks(h, query);
+  if (bookId !== undefined) {
+    return getBookByID(h, bookId);
   }
 
-  const bookToSent = books.filter((book) => book.id === bookId)[0];
-  return getBookByID(h, bookToSent);
+  return getAllBooks(h, query);
 };
 
 /**
