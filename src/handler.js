@@ -62,18 +62,18 @@ const addBook = (request, h) => {
 
 const getBooksByName = (h, nameQuery) => {
   const nameRegexPattern = new RegExp(nameQuery, 'i');
-  const filteredBooks = books.filter((book) => nameRegexPattern.test(book.name));
-
-  const booksToSent = [];
-  filteredBooks.forEach((book) => {
-    const { id, name, publisher } = book;
-    booksToSent.push({ id, name, publisher });
-  });
+  const filteredBooks = books.filter((book) => (
+    nameRegexPattern.test(book.name)
+  ));
 
   return h.response({
     status: 'success',
     data: {
-      books: booksToSent,
+      books: filteredBooks.map((book) => ({
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
+      })),
     },
   }).code(200);
 };
@@ -83,16 +83,14 @@ const getBookByReading = (h, readingQuery) => {
     readingQuery === '1' ? book.reading === true : book.reading === false
   ));
 
-  const booksToSent = [];
-  filteredBooks.forEach((book) => {
-    const { id, name, publisher } = book;
-    booksToSent.push({ id, name, publisher });
-  });
-
   return h.response({
     status: 'success',
     data: {
-      books: booksToSent,
+      books: filteredBooks.map((book) => ({
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
+      })),
     },
   }).code(200);
 };
@@ -102,16 +100,14 @@ const getBookByFinished = (h, finishedQuery) => {
     finishedQuery === '1' ? book.finished === true : book.finished === false
   ));
 
-  const booksToSent = [];
-  filteredBooks.forEach((book) => {
-    const { id, name, publisher } = book;
-    booksToSent.push({ id, name, publisher });
-  });
-
   return h.response({
     status: 'success',
     data: {
-      books: booksToSent,
+      books: filteredBooks.map((book) => ({
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
+      })),
     },
   }).code(200);
 };
@@ -129,16 +125,14 @@ const getAllBooks = (h, query) => {
     return getBookByFinished(h, query.finished);
   }
 
-  const booksToSent = [];
-  books.forEach((book) => {
-    const { id, name, publisher } = book;
-    booksToSent.push({ id, name, publisher });
-  });
-
   return h.response({
     status: 'success',
     data: {
-      books: booksToSent,
+      books: books.map((book) => ({
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
+      })),
     },
   }).code(200);
 };
