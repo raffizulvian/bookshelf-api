@@ -60,8 +60,8 @@ const addBook = (request, h) => {
   }).code(201);
 };
 
-const getBooksByName = (h, name) => {
-  const booksToSent = books.filter((book) => book.name.include(name));
+const getBooksByName = (h, nameQuery) => {
+  const booksToSent = books.filter((book) => book.name.include(nameQuery));
 
   return h.response({
     status: 'success',
@@ -71,9 +71,9 @@ const getBooksByName = (h, name) => {
   }).code(200);
 };
 
-const getBookByReading = (h, reading) => {
+const getBookByReading = (h, readingQuery) => {
   const booksToSent = books.filter((book) => (
-    book.reading === true ? reading === 1 : book.reading === false
+    book.reading === true ? readingQuery === 1 : book.reading === false
   ));
 
   return h.response({
@@ -84,9 +84,9 @@ const getBookByReading = (h, reading) => {
   }).code(200);
 };
 
-const getBookByFinished = (h, finished) => {
+const getBookByFinished = (h, finishedQuery) => {
   const booksToSent = books.filter((book) => (
-    book.finished === true ? finished === 1 : book.finished === false
+    book.finished === true ? finishedQuery === 1 : book.finished === false
   ));
 
   return h.response({
