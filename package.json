@@ -15,6 +15,12 @@
     "url" : "https://wwww.linkedin.com/in/raffizulvian/"
   },
   "license": "ISC",
+  "repository": {
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/raffizulvian/bookshelf-api.git"
+    }
+  },
   "dependencies": {
     "@hapi/hapi": "^20.1.2",
     "nanoid": "^3.1.22"
