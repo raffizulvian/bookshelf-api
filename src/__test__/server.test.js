@@ -163,3 +163,60 @@ describe('POST /books', () => {
     });
   });
 });
+
+describe('GET /books', () => {
+  describe('Get All Books', () => {
+    const options = {
+      method: 'GET',
+      url: '/books',
+    };
+
+    test('Status code should be 200', async () => {
+      const res = await server.inject(options);
+
+      expect(res.statusCode).toBe(200);
+    });
+
+    test('Response header Content-Type should be application/json', async () => {
+      const res = await server.inject(options);
+
+      expect(res.headers['content-type']).toContain('application/json');
+    });
+
+    test('Response body should be an object', async () => {
+      const res = await server.inject(options);
+
+      expect(res).toBeInstanceOf(Object);
+    });
+
+    test('Response body should have correct property and value', async () => {
+      const res = await server.inject(options);
+
+      expect(res.result).toHaveProperty('status');
+      expect(res.result).toHaveProperty('data');
+
+      expect(res.result.status).toEqual('success');
+      expect(res.result.data).toBeInstanceOf(Object);
+    });
+
+    test('Response body data object should have an array books and contains one items', async () => {
+      const res = await server.inject(options);
+      const { data } = res.result;
+
+      expect(data).toHaveProperty('books');
+      expect(data.books).toBeInstanceOf(Array);
+    });
+
+    test('The books should have contains only id, name, and publisher property', async () => {
+      const res = await server.inject(options);
+      const { data: { books } } = res.result;
+
+      books.forEach((book) => {
+        expect(Object.keys(book)).toHaveLength(3);
+        expect(book).toHaveProperty('id');
+        expect(book).toHaveProperty('name');
+        expect(book).toHaveProperty('publisher');
+      });
+    });
+  });
+});
