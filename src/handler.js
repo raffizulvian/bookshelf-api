@@ -296,6 +296,7 @@ const deleteBookByID = (request, h) => {
   }
 
   books.splice(idx);
+
   return h.response({
     status: 'success',
     message: 'Buku berhasil dihapus',
@@ -312,7 +313,7 @@ const notFound = (request, h) => h.response({
   statusCode: '404',
   error: 'Not Found',
   message: `${request.url} saat ini tidak tersedia dan tidak dapat menangani permintaan ${request.method}`,
-}).code(400);
+}).code(404);
 
 module.exports = {
   addBook, getBooks, editBookByID, deleteBookByID, notFound,
