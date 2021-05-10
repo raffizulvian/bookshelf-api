@@ -1,5 +1,5 @@
 const { nanoid } = require('nanoid');
-const books = require('./books');
+const db = require('./books');
 
 /**
  * Menangani permintaan HTTP 'POST' dan menambahkan info buku baru ke penyimpanan data
@@ -47,9 +47,9 @@ const addBook = (request, h) => {
     updatedAt,
   };
 
-  books.push(newBook);
+  db.add(newBook);
 
-  const isSuccess = books.filter((book) => book.id === id).length > 0;
+  const isSuccess = db.read().filter((book) => book.id === id).length > 0;
 
   if (!isSuccess) {
     return h.response({
@@ -77,7 +77,7 @@ const addBook = (request, h) => {
  */
 const getBooksByName = (h, nameQuery) => {
   const nameRegexPattern = new RegExp(nameQuery, 'i');
-  const filteredBooks = books.filter((book) => (
+  const filteredBooks = db.read().filter((book) => (
     nameRegexPattern.test(book.name)
   ));
 
@@ -102,7 +102,7 @@ const getBooksByName = (h, nameQuery) => {
  * @returns {Object} HTTP response
  */
 const getBookByReading = (h, readingQuery) => {
-  const filteredBooks = books.filter((book) => (
+  const filteredBooks = db.read().filter((book) => (
     readingQuery === '1' ? book.reading === true : book.reading === false
   ));
 
@@ -128,7 +128,7 @@ const getBookByReading = (h, readingQuery) => {
  * @returns {Object} HTTP response
  */
 const getBookByFinished = (h, finishedQuery) => {
-  const filteredBooks = books.filter((book) => (
+  const filteredBooks = db.read().filter((book) => (
     finishedQuery === '1' ? book.finished === true : book.finished === false
   ));
 
@@ -166,7 +166,7 @@ const getAllBooks = (h, query) => {
   return h.response({
     status: 'success',
     data: {
-      books: books.map((book) => ({
+      books: db.read().map((book) => ({
         id: book.id,
         name: book.name,
         publisher: book.publisher,
@@ -182,7 +182,7 @@ const getAllBooks = (h, query) => {
  * @returns {Object} HTTP response
  */
 const getBookByID = (h, bookId) => {
-  const bookToSent = books.filter((book) => book.id === bookId)[0];
+  const bookToSent = db.read().filter((book) => book.id === bookId)[0];
 
   if (bookToSent === undefined) {
     return h.response({
@@ -247,7 +247,7 @@ const editBookByID = (request, h) => {
     }).code(400);
   }
 
-  const idx = books.findIndex((book) => book.id === bookId);
+  const idx = db.read().findIndex((book) => book.id === bookId);
 
   if (idx === -1) {
     return h.response({
@@ -258,8 +258,8 @@ const editBookByID = (request, h) => {
 
   const updatedAt = new Date().toISOString();
 
-  books[idx] = {
-    ...books[idx],
+  db.update(idx, {
+    ...db.read()[idx],
     name,
     year,
     author,
@@ -269,7 +269,7 @@ const editBookByID = (request, h) => {
     readPage,
     reading,
     updatedAt,
-  };
+  });
 
   return h.response({
     status: 'success',
@@ -286,7 +286,7 @@ const editBookByID = (request, h) => {
 const deleteBookByID = (request, h) => {
   const { bookId } = request.params;
 
-  const idx = books.findIndex((book) => book.id === bookId);
+  const idx = db.read().findIndex((book) => book.id === bookId);
 
   if (idx === -1) {
     return h.response({
@@ -295,7 +295,7 @@ const deleteBookByID = (request, h) => {
     }).code(404);
   }
 
-  books.splice(idx);
+  db.delete(idx);
 
   return h.response({
     status: 'success',
