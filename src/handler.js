@@ -47,9 +47,7 @@ const addBook = (request, h) => {
     updatedAt,
   };
 
-  db.add(newBook);
-
-  const isSuccess = db.read().filter((book) => book.id === id).length > 0;
+  const isSuccess = db.add(newBook);
 
   if (!isSuccess) {
     return h.response({
@@ -72,7 +70,7 @@ const addBook = (request, h) => {
  * dengan nama buku. Daftar yyang akan ditampilkan adalah daftar buku-uku yang pada namanya
  * mengandung query yang diberikan. Query yang diberikan bersifat non-case sensitive.
  * @param {Object} h
- * @param {string} nameQuery
+ * @param {String} nameQuery
  * @returns {Object} HTTP response
  */
 const getBooksByName = (h, nameQuery) => {
@@ -98,7 +96,7 @@ const getBooksByName = (h, nameQuery) => {
  * sedang dibaca atau tidak. Bila query bernilai '1', maka akan mengembalikan buku yang sedang
  * dibaca. Bila query bernilai 0, maka akan mengembalikan daftar buku yang tidak sedang dibaca.
  * @param {Object} h
- * @param {string} readingQuery - '1' atau '0'
+ * @param {String} readingQuery - '1' atau '0'
  * @returns {Object} HTTP response
  */
 const getBookByReading = (h, readingQuery) => {
@@ -124,7 +122,7 @@ const getBookByReading = (h, readingQuery) => {
  * selesai dibaca. Bila query bernilai 0, maka akan mengembalikan daftar buku yang belum selesai
  * dibaca.
  * @param {Object} h
- * @param {string} finishedQuery - '1' atau '0'
+ * @param {String} finishedQuery - '1' atau '0'
  * @returns {Object} HTTP response
  */
 const getBookByFinished = (h, finishedQuery) => {
@@ -182,7 +180,7 @@ const getAllBooks = (h, query) => {
  * @returns {Object} HTTP response
  */
 const getBookByID = (h, bookId) => {
-  const bookToSent = db.read().filter((book) => book.id === bookId)[0];
+  const bookToSent = db.find(bookId);
 
   if (bookToSent === undefined) {
     return h.response({
@@ -247,7 +245,7 @@ const editBookByID = (request, h) => {
     }).code(400);
   }
 
-  const idx = db.read().findIndex((book) => book.id === bookId);
+  const idx = db.findIdx(bookId);
 
   if (idx === -1) {
     return h.response({
@@ -259,7 +257,6 @@ const editBookByID = (request, h) => {
   const updatedAt = new Date().toISOString();
 
   db.update(idx, {
-    ...db.read()[idx],
     name,
     year,
     author,
@@ -286,7 +283,7 @@ const editBookByID = (request, h) => {
 const deleteBookByID = (request, h) => {
   const { bookId } = request.params;
 
-  const idx = db.read().findIndex((book) => book.id === bookId);
+  const idx = db.findIdx(bookId);
 
   if (idx === -1) {
     return h.response({
