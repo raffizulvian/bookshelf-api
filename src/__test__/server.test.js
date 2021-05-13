@@ -1,9 +1,11 @@
 const server = require('../server');
+const db = require('../books');
 
 beforeAll((done) => {
   server.events.on('start', () => {
     done();
   });
+  db.clear();
 });
 
 afterAll((done) => {
